@@ -17,7 +17,7 @@ class Game (object):
 		self.score = 0
 		self.stale_count = 0
 		self.spawn_tile ()
-		#self.spawn_tile ()
+		self.spawn_tile ()
 
 	def get_state (self):
 		return self.state
@@ -31,7 +31,11 @@ class Game (object):
 			if value == 0:
 				validIndices += [index]
 
-		self.state [validIndices [random.randint (0, len (validIndices) - 1)]] = 2
+		t = 2
+		if random.random () < 0.1:
+			t = 4
+
+		self.state [validIndices [random.randint (0, len (validIndices) - 1)]] = t
 
 	def process_move (self, move, visual=False):
 		hasChanged = False
@@ -85,6 +89,13 @@ class Game (object):
 				self.state [indices [a]] = new_row [a] 
 
 		return hasChanged
+
+	def deep_copy (self):
+		g = Game ()
+		g.state = self.state [:]
+		g.score = self.score
+		g.stale_count = self.stale_count
+		return g
 
 	def __str__ (self):
 		r = 'Score: ' + str (self.score) + '\n'
